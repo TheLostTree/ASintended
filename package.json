@@ -1,0 +1,20 @@
+{
+  "name": "gi_ability_interp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "poormanstsnode": "tsc && node dist/index.js",
+    "index": "npx ts-node index.ts"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.3.1",
+    "jsonc-parser": "^3.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.8.6"
+  }
+}

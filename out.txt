@@ -1,0 +1,18 @@
+
+> gi_ability_interp@1.0.0 index
+> npx ts-node index.ts
+
+  Setting global value _ABILITY_Kokomi_ElementalBurst_Flag to 0
+  Setting global value _ABILITY_Kokomi_ElementalBurst_MoveOnWater_Flag to 0
+  Started ability Avatar_Kokomi_ElementalBurst_Initiate
+    Setting global value _ABILITY_Kokomi_ElementalBurst_MoveOnWater_Flag to 1
+      Attack Event w/ Attack formula: %FIGHT_PROP_MAX_HP*%ElementalBurst_Damage_MaxHP_Percentage
+    adding UNIQUE_Kokomi_ElementalBurst_Handler to modifiers
+        adding UNIQUE_Avatar_Kokomi_ElementalBurst_Weather to modifiers
+        Setting global value _ABILITY_Kokomi_ElementalBurst_Flag to 1
+        Checking if Avatar_Kokomi_Talent_ElementalBurstRefreshGadget is unlocked: true
+        Checking if Avatar_Kokomi_ElementalBurst_DamageBuff_HealAdd is unlocked: true
+        adding UNIQUE_Avatar_Kokomi_ElementalBurst_DamageBuff_HealAdd to modifiers
+        Checking if Avatar_Kokomi_ElementalBurst_AtkSpeeddBuff is unlocked: false
+    adding SendEffectTrigger to modifiers
+        Setting global value _ABILITY_Kokomi_ElementalArt_Burst_Flag to 1
