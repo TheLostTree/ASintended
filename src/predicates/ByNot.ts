@@ -1,0 +1,7 @@
+
+
+
+
+type ByNot = {
+    predicates: Predicate[];
+}

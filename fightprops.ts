@@ -94,3 +94,5 @@ export enum FightProperties {
     FIGHT_PROP_NONEXTRA_SHIELD_COST_MINUS_RATIO = 3023,
     FIGHT_PROP_NONEXTRA_PHYSICAL_ADD_HURT = 3024
 }
+
+export type FightProp = keyof typeof FightProperties;

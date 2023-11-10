@@ -2,17 +2,48 @@
 > gi_ability_interp@1.0.0 index
 > npx ts-node index.ts
 
+start loading default abilities
   Setting global value _ABILITY_Kokomi_ElementalBurst_Flag to 0
   Setting global value _ABILITY_Kokomi_ElementalBurst_MoveOnWater_Flag to 0
-  Started ability Avatar_Kokomi_ElementalBurst_Initiate
-    Setting global value _ABILITY_Kokomi_ElementalBurst_MoveOnWater_Flag to 1
-      Attack Event w/ Attack formula: %FIGHT_PROP_MAX_HP*%ElementalBurst_Damage_MaxHP_Percentage
-    adding UNIQUE_Kokomi_ElementalBurst_Handler to modifiers
-        adding UNIQUE_Avatar_Kokomi_ElementalBurst_Weather to modifiers
-        Setting global value _ABILITY_Kokomi_ElementalBurst_Flag to 1
-        Checking if Avatar_Kokomi_Talent_ElementalBurstRefreshGadget is unlocked: true
-        Checking if Avatar_Kokomi_ElementalBurst_DamageBuff_HealAdd is unlocked: true
-        adding UNIQUE_Avatar_Kokomi_ElementalBurst_DamageBuff_HealAdd to modifiers
-        Checking if Avatar_Kokomi_ElementalBurst_AtkSpeeddBuff is unlocked: false
-    adding SendEffectTrigger to modifiers
-        Setting global value _ABILITY_Kokomi_ElementalArt_Burst_Flag to 1
+init skills
+  adding UNIQUE_SwimStaminaReduction to modifiers
+    Adding modifier UNIQUE_SwimStaminaReduction to modifiers
+  adding Kokomi_SwimStaminaReduction_Handler to modifiers
+    Adding modifier Kokomi_SwimStaminaReduction_Handler to modifiers
+  adding Avatar_Kokomi_CritRateDown to modifiers
+    Adding modifier Avatar_Kokomi_CritRateDown to modifiers
+  adding UNIQUE_SwimStaminaReduction to modifiers
+    Adding modifier UNIQUE_SwimStaminaReduction to modifiers
+  adding Kokomi_SwimStaminaReduction_Handler to modifiers
+    Adding modifier Kokomi_SwimStaminaReduction_Handler to modifiers
+  adding Avatar_Kokomi_CritRateDown to modifiers
+    Adding modifier Avatar_Kokomi_CritRateDown to modifiers
+Started ability Avatar_Kokomi_ElementalBurst_Initiate
+  Setting global value _ABILITY_Kokomi_ElementalBurst_MoveOnWater_Flag to 1
+    Attack Event, ability name Avatar_Kokomi_ElementalBurst_Initiate w/ Attack formula: %FIGHT_PROP_MAX_HP*%ElementalBurst_Damage_MaxHP_Percentage = 174.764147712
+  adding UNIQUE_Kokomi_ElementalBurst_Handler to modifiers
+    Modifier UNIQUE_Kokomi_ElementalBurst_Handler has a duration: 10
+    Adding modifier UNIQUE_Kokomi_ElementalBurst_Handler to modifiers
+      adding UNIQUE_Avatar_Kokomi_ElementalBurst_Weather to modifiers
+        Adding modifier UNIQUE_Avatar_Kokomi_ElementalBurst_Weather to modifiers
+      Setting global value _ABILITY_Kokomi_ElementalBurst_Flag to 1
+      Checking if Avatar_Kokomi_Talent_ElementalBurstRefreshGadget is unlocked: true
+      Triggering ability Kokomi_ElementalArt_Gadget
+      Started ability Kokomi_ElementalArt_Gadget
+        adding UNIQUE_Kokomi_ElementalArt_Gadget_LifeTime to modifiers
+          Modifier UNIQUE_Kokomi_ElementalArt_Gadget_LifeTime has a duration: 12
+          Adding modifier UNIQUE_Kokomi_ElementalArt_Gadget_LifeTime to modifiers
+      Checking if Avatar_Kokomi_ElementalBurst_DamageBuff_HealAdd is unlocked: true
+      adding UNIQUE_Avatar_Kokomi_ElementalBurst_DamageBuff_HealAdd to modifiers
+        Adding modifier UNIQUE_Avatar_Kokomi_ElementalBurst_DamageBuff_HealAdd to modifiers
+      Checking if Avatar_Kokomi_ElementalBurst_AtkSpeeddBuff is unlocked: true
+      adding UNIQUE_Avatar_Kokomi_ElementalBurst_AtkSpeedBuff to modifiers
+        Adding modifier UNIQUE_Avatar_Kokomi_ElementalBurst_AtkSpeedBuff to modifiers
+  adding SendEffectTrigger to modifiers
+    Modifier SendEffectTrigger has a duration: 0.2
+    Adding modifier SendEffectTrigger to modifiers
+      Setting global value _ABILITY_Kokomi_ElementalArt_Burst_Flag to 1
+Started ability Avatar_Kokomi_Attack01
+  Started ability Avatar_Kokomi_NormalAttack_Bullet_1_Burst_Damage
+      Attack Event, ability name Avatar_Kokomi_NormalAttack_Bullet_1_Burst_Damage w/ Attack formula: %FIGHT_PROP_MAX_HP*%NormalAttack_MaxHP_Percentage = 81.20761088
+    Action KillSelf not implemented

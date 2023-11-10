@@ -1,5 +1,6 @@
 
 import { getFile } from ".";
+import { FightProp, FightProperties } from "./fightprops";
 
 
 //returns an array of numbers from start to end inclusive
@@ -63,14 +64,22 @@ class ProudSkillData {
 
     static getAddProps(id: any) {
         let data = ProudSkillData.get(id);
-        let props = [];
-        let add0t = data[`addProps0PropType`];
-        let add0v = data[`addProps0Value`];
-        let add1t = data[`addProps1PropType`];
-        let add1v = data[`addProps1Value`];
-        props.push({ propType: add0t, value: add0v });
-        props.push({ propType: add1t, value: add1v });
+
+
+        return range(1,2).map(x => {
+            let addt = data[`addProps${x}PropType`];
+            let addv = data[`addProps${x}Value`];
+            return { propType: addt, value: addv }
+        })
     }
+
+    static getSkillIdFromSkillGroupIdAndLvl(skillGroupId: number, lvl: number) {
+        let data = ProudSkillData.getWithGroupId(skillGroupId);
+        let skillId = data.filter(x => x["level"] == lvl)[0]["proudSkillId"];
+        return skillId;
+
+    }
+
 
     static getParams(id: any) {
         let data = ProudSkillData.get(id);
@@ -168,10 +177,125 @@ class AvatarData {
         return data[`技能库ID`];
     }
 
+    static getPromoteId(id: any) {
+        let data = this.get(id);
+        //  '角色突破ID': '35',
+        return data[`角色突破ID`];
+    }
+    static getBaseProps(id : any){
+        let data = this.get(id);
+
+        let props : Partial<{[PROP in FightProp] : string}> = {};
+        //基础生命值
+        let hpBase = data[`基础生命值`];
+        props["FIGHT_PROP_BASE_HP"] = hpBase;
+        //基础攻击力
+        let atkBase = data[`基础攻击力`];
+        props["FIGHT_PROP_BASE_ATTACK"] = atkBase;
+
+        //基础防御力
+        let defBase = data[`基础防御力`];
+        props["FIGHT_PROP_BASE_DEFENSE"] = defBase;
+
+
+        //暴击率
+        let critRate = data[`暴击率`];
+        props["FIGHT_PROP_CRITICAL"] = critRate;
+
+        //暴击抗性
+        // let critResistance = data[`暴击抗性`]; // ignore i guess
+
+        //暴击伤害
+        let critDamage = data[`暴击伤害`];
+        props["FIGHT_PROP_CRITICAL_HURT"] = critDamage;
+
+        //[属性成长]1类型
+        //[属性成长]1曲线
+
+        let PropGrowth1Type = data[`[属性成长]1类型`];
+        let PropGrowth1Curve = data[`[属性成长]1曲线`];
+
+        //[属性成长]2类型
+        //[属性成长]2曲线
+
+        let PropGrowth2Type = data[`[属性成长]2类型`];
+        let PropGrowth2Curve = data[`[属性成长]2曲线`];
+
+        //[属性成长]3类型
+        //[属性成长]3曲线
+
+        let PropGrowth3Type = data[`[属性成长]3类型`];
+        let PropGrowth3Curve = data[`[属性成长]3曲线`];
+
+        let propGrowthCurves = [
+            {type: PropGrowth1Type, growCurve: PropGrowth1Curve},
+            {type: PropGrowth2Type, growCurve: PropGrowth2Curve},
+            {type: PropGrowth3Type, growCurve: PropGrowth3Curve},
+        ]
+
+        return {props, propGrowthCurves};
+
+
+    }
+
 
 
 }
 
+
+class AvatarCurveData {
+    static data = <any[]>[]
+    static isLoaded = false;
+
+    static headers: string[];
+    static load() {
+        let path = `txt/AvatarCurveData.txt`
+        let file = getFile(path);
+        //its a tsv...
+        let lines = file.split('\n');
+        this.headers = lines[0].split('\t');
+        let data = lines.slice(1).map(line => {
+            let obj = {};
+            let values = line.split('\t');
+            this.headers.forEach((header, i) => {
+                obj[header] = values[i];
+            });
+            return obj;
+        });
+        this.data = data;
+        this.isLoaded = true;
+    }
+
+    static get(level: any) {
+        if (typeof level === "number") level = `${level}`
+
+        if (!this.isLoaded) {
+            this.load();
+        }
+        return this.data.find((d: any) => d["等级"] === level);
+    }
+
+    static getCurveForLevel(level : number, curveType:number|string){
+        //等级	[曲线]1类型	[曲线]1运算	[曲线]1值	[曲线]2类型	[曲线]2运算	[曲线]2值	[曲线]3类型	[曲线]3运算	[曲线]3值	[曲线]4类型	[曲线]4运算	[曲线]4值
+
+        let data = this.get(level);
+        let curves = [];
+        
+        range(1,4).forEach(x=>{
+            let type = data[`[曲线]${x}类型`];
+            let op = data[`[曲线]${x}运算`];
+            let val = data[`[曲线]${x}值`];
+            curves.push({type, op, val});
+        })
+        
+        return curves.filter(x=>x.type == curveType)[0];
+
+
+    }
+
+
+
+}
 class AvatarSkillDepotData {
     static data = <any[]>[]
     static isLoaded = false;
@@ -242,5 +366,163 @@ class AvatarSkillDepotData {
 }
 
 
+class AvatarSkillData{
+    static data = <any[]>[]
+    static isLoaded = false;
+    static headers: any;
 
-export { ProudSkillData, GadgetData, AvatarData, AvatarSkillDepotData }
+    static load(){
+        let path = `txt/AvatarSkillData.txt`
+        let file = getFile(path);
+        //its a tsv...
+        let lines = file.split('\n');
+        this.headers = lines[0].split('\t');
+        let data = lines.slice(1).map(line => {
+            let obj = {};
+            let values = line.split('\t');
+            this.headers.forEach((header, i) => {
+                obj[header] = values[i];
+            });
+            return obj;
+        });
+        this.data = data;
+        this.isLoaded = true;
+    }
+
+    static get(id: any) {
+        if (typeof id === "number") id = `${id}`
+        if (!this.isLoaded) {
+            this.load();
+        }
+        return this.data.find((d: any) => d["ID"] === id);
+    }
+
+    static getSkillDepotId(id: any) {
+        let data = this.get(id);
+        return data[`升级技能组ID`];
+    }
+
+    
+
+}
+
+class AvatarTalentData{
+
+    static data = <any[]>[]
+    static isLoaded = false;
+    static headers: any;
+
+    static load(){
+        let path = `txt/TalentSkillData.txt`
+        let file = getFile(path);
+        //its a tsv...
+        let lines = file.split('\n');
+        this.headers = lines[0].split('\t');
+        let data = lines.slice(1).map(line => {
+            let obj = {};
+            let values = line.split('\t');
+            this.headers.forEach((header, i) => {
+                obj[header] = values[i];
+            });
+            return obj;
+        });
+        this.data = data;
+        this.isLoaded = true;
+    }
+
+    static get(id: any) {
+        if (typeof id === "number") id = `${id}`
+        if (!this.isLoaded) {
+            this.load();
+        }
+        return this.data.find((d: any) => d["天赋ID"] === id);
+    }
+
+    static getOpenConfig(id: any) {
+        let data = this.get(id);
+        return data[`开启天赋配置`];
+    }
+
+    static getAddProps(id:any){
+        let data = this.get(id);
+
+        return range(1,2).map(x=>{
+            //[增加属性]1类型	[增加属性]1值
+            let propType = data[`[增加属性]${x}类型`];
+            let value = data[`[增加属性]${x}值`];
+            return {
+                propType, value
+            }
+        
+        })
+    }
+
+    static getParams(talentId: any) {
+        let data = this.get(talentId);
+        return range(1, 7).map(x => {
+            return data[`参数${x}`]
+        })
+    }
+
+    
+
+}
+
+class AvatarPromoteData{
+
+    static data = <any[]>[]
+    static isLoaded = false;
+    static headers: any;
+
+    static load(){
+        let path = `txt/AvatarPromoteData.txt`
+        let file = getFile(path);
+        //its a tsv...
+        let lines = file.split('\n');
+        this.headers = lines[0].split('\t');
+        let data = lines.slice(1).map(line => {
+            let obj = {};
+            let values = line.split('\t');
+            this.headers.forEach((header, i) => {
+                obj[header] = values[i];
+            });
+            return obj;
+        });
+        this.data = data;
+        this.isLoaded = true;
+    }
+
+    static get(id: any) {
+        if (typeof id === "number") id = `${id}`
+        if (!this.isLoaded) {
+            this.load();
+        }
+        return this.data.filter((d: any) => d["角色突破ID"] === id);
+    }
+
+    static getUnlockMaxLevel(id: any, promoteLevel: any) {
+        let data = this.get(id).filter(x=>x["突破等级"] == promoteLevel)[0];
+
+        return data[`解锁等级上限`];
+    }
+
+    static getAddProps(id: any, promoteLevel: any){
+
+        let data = this.get(id).filter(x=>x["突破等级"] == promoteLevel)[0];
+
+        //[增加属性]1类型
+        //[增加属性]1值
+        return range(1,4).map(x=>{
+            let propType = data[`[增加属性]${x}类型`];
+            let value = data[`[增加属性]${x}值`]||"0";
+            return {propType, value}
+        })
+    }
+
+    
+
+}
+
+
+
+export { ProudSkillData, GadgetData, AvatarData, AvatarSkillDepotData, AvatarTalentData, AvatarCurveData, AvatarSkillData, AvatarPromoteData}
